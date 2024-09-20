@@ -13,7 +13,7 @@ export default function Home() {
         <Clients/>
       </div>
 
-      <div className='flex border-black border-2 w-screen'>
+      <div className='flex w-screen border-2 border-black h-[650px]'>
         <div className='w-1/2 border-2 border-black'>
             <h1>hi1</h1>
         </div>
@@ -23,7 +23,7 @@ export default function Home() {
       </div>
 
       <div className='border-2 border-black'>
-        <h1>hiii3</h1>
+      
       </div>
     </div>
   )

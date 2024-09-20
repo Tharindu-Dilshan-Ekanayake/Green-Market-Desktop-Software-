@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 const cors = require('cors');
 
-const { storeitems } = require('../controllers/storeController')
+const { storeitems, getStore, deletestore } = require('../controllers/storeController')
 
 router.use(
     cors({
@@ -11,7 +11,9 @@ router.use(
     })
 );
 
-router.post('/storecreate', storeitems)
+router.post('/storecreate', storeitems);
+router.get('/storeget',getStore);
+router.delete('/deletestore/:storeId', deletestore)
 
 
 module.exports = router
