@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 export default function ModifyClient({ visible, onClose, onClientModifieded }) {
   const [clients, setClients] = useState([]);
@@ -50,10 +52,11 @@ export default function ModifyClient({ visible, onClose, onClientModifieded }) {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-100">
               <tr>
-                <th className="px-6 py-3 text-sm font-medium text-left text-gray-500">First Name</th>
-                <th className="px-6 py-3 text-sm font-medium text-left text-gray-500">Last Name</th>
-                <th className="px-6 py-3 text-sm font-medium text-left text-gray-500">Phone</th>
-                <th className="px-6 py-3 text-sm font-medium text-left text-gray-500">Email</th>
+                <th className="px-6 py-3 text-sm font-medium text-center text gray-500">First Name</th>
+                <th className="px-6 py-3 text-sm font-medium text-center text- gray-500">Last Name</th>
+                <th className="px-6 py-3 text-sm font-medium text-center text- gray-500">Phone</th>
+                <th className="px-6 py-3 text-sm font-medium text-center gray-500 text-">Email</th>
+                <th className="px-6 py-3 text-sm font-medium text-center gray-500 text-">Edit</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -64,6 +67,18 @@ export default function ModifyClient({ visible, onClose, onClientModifieded }) {
                     <td className="px-6 py-4 text-sm text-gray-500">{client.lname}</td>
                     <td className="px-6 py-4 text-sm text-gray-500">{client.tp}</td>
                     <td className="px-6 py-4 text-sm text-gray-500">{client.email}</td>
+                    <td>
+                      <div className='flex justify-center'>
+                        <div>
+                          <button><FaEdit></FaEdit></button>
+                        </div>
+                        <div>
+                          <button>
+                            <MdDelete/>
+                          </button>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
                 ))
               ) : (
