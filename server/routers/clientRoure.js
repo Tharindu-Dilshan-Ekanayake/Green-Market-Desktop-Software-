@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 const cors = require('cors');
 
-const { CreateClient, getClients } = require('../controllers/clientController')
+const { CreateClient, getClients, deleteclient, updateclient } = require('../controllers/clientController')
 router.use(
     cors({
         credentials: true,
@@ -11,6 +11,8 @@ router.use(
 );
 
 router.post('/createclient', CreateClient);
-router.get('/getclient',getClients)
+router.get('/getclient',getClients);
+router.delete('/deleteclient/:clientId',deleteclient);
+router.put('/updateclient/:clientId', updateclient); // Add this line
 
 module.exports = router

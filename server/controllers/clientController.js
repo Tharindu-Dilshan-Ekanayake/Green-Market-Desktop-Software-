@@ -54,7 +54,61 @@ const getClients = async (req, res) => {
     }
 };
 
+//delete client
+const deleteclient = async (req, res) => {
+    try {
+        const clientId = req.params.clientId;
+
+        // Delete the client from the database
+        const deletedClient = await Client.findByIdAndDelete(clientId);
+
+        if (!deletedClient) {
+            return res.status(404).json({ error: 'Client not found' });
+        }
+
+        res.status(200).json({ message: 'Client deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting client:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+//u[date client
+
+const updateclient = async (req, res) => {
+    const clientId = req.params.clientId;
+    const {fname, lname, tp, email} = req.body;
+
+    try {
+        // Find and update the client
+        const updatedClient = await Client.findByIdAndUpdate(
+            clientId,
+            { fname, lname, tp, email },
+            { new: true, runValidators: true } // Return the updated document and run validation
+        );
+
+        if (!updatedClient) {
+            return res.status(404).json({
+                error: 'Client not found'
+            });
+        }
+
+        return res.status(200).json({
+            message: 'Client updated successfully',
+            data: updatedClient
+        });
+    } catch (error) {
+        console.error('Error updating client:', error);
+        return res.status(500).json({
+            error: 'Internal server error'
+        });
+    }
+}
+
+
 module.exports = {
     CreateClient,
-    getClients
+    getClients,
+    deleteclient,
+    updateclient
 }
