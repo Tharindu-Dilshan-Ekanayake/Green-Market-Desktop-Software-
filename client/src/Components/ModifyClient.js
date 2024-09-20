@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { toast } from 'react-hot-toast';
 
 export default function ModifyClient({ visible, onClose, onClientModifieded }) {
   const [clients, setClients] = useState([]);
@@ -14,6 +15,20 @@ export default function ModifyClient({ visible, onClose, onClientModifieded }) {
       setClients(response.data);
     } catch (error) {
       console.error('Error fetching client data:', error);
+    }
+  };
+
+  // Function to delete a client
+  const deleteClient = async (clientId) => {
+    if (window.confirm('Are you sure you want to delete this client?')) {
+      try {
+        await axios.delete(`/deleteclient/${clientId}`);
+        setClients(clients.filter(client => client._id !== clientId)); // Remove client from state
+        toast.success('Client deleted successfully!'); // Show success toast
+      } catch (error) {
+        toast.error('Failed to delete client. Please try again.'); // Show error toast
+        console.error('Error deleting client:', error);
+      }
     }
   };
 
@@ -56,7 +71,7 @@ export default function ModifyClient({ visible, onClose, onClientModifieded }) {
                 <th className="px-6 py-3 text-sm font-medium text-center text- gray-500">Last Name</th>
                 <th className="px-6 py-3 text-sm font-medium text-center text- gray-500">Phone</th>
                 <th className="px-6 py-3 text-sm font-medium text-center gray-500 text-">Email</th>
-                <th className="px-6 py-3 text-sm font-medium text-center gray-500 text-">Edit</th>
+                <th className="px-6 py-3 text-sm font-medium text-center gray-500 text-">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -70,11 +85,11 @@ export default function ModifyClient({ visible, onClose, onClientModifieded }) {
                     <td>
                       <div className='flex justify-center'>
                         <div>
-                          <button><FaEdit></FaEdit></button>
+                          <button><FaEdit className='size-6 hover:text-blue-950'></FaEdit></button>
                         </div>
-                        <div>
-                          <button>
-                            <MdDelete/>
+                        <div className='pl-5'>
+                          <button onClick={() => deleteClient(client._id)}>
+                            <MdDelete className='text-red-500 size-6 hover:text-red-700'/>
                           </button>
                         </div>
                       </div>
@@ -83,7 +98,7 @@ export default function ModifyClient({ visible, onClose, onClientModifieded }) {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" className="px-6 py-4 text-sm text-center text-gray-500">
+                  <td colSpan="5" className="px-6 py-4 text-sm text-center text-gray-500">
                     No clients found
                   </td>
                 </tr>
