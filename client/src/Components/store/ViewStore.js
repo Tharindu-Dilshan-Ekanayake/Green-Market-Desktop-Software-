@@ -43,7 +43,7 @@ export default function ViewStore({ visible, onClose }) {
   const deleteStore = async (storeId) => {
     if (window.confirm('Are you sure you want to delete this store item?')) {
       try {
-        await axios.delete(`/deletestore/${storeId}`);
+        await axios.delete(`/store/deletestore/${storeId}`);
         setStores(stores.filter(store => store._id !== storeId)); // Remove store from state
         toast.success('Store item deleted successfully!');
       } catch (error) {
@@ -63,7 +63,7 @@ export default function ViewStore({ visible, onClose }) {
   const updateStore = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`/updateStore/${currentStore._id}`, currentStore);
+      await axios.put(`/store/updateStore/${currentStore._id}`, currentStore);
       setStores(stores.map(store => (store._id === currentStore._id ? currentStore : store)));
       toast.success('Store item updated successfully!');
       setEditMode(false);
