@@ -4,6 +4,9 @@ const storeSchema = new mongoose.Schema({
     item:{
         type: String,
     },
+    itemno:{
+        type: String,
+    },
     ppu:{
         type:Number
     },
