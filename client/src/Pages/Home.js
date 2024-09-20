@@ -1,6 +1,7 @@
 import React from 'react'
 import Nav from '../Components/Nav'
 import Clients from '../Components/Clients'
+import StoreButton from '../Components/store/StoreButton'
 
 export default function Home() {
   return (
@@ -22,8 +23,10 @@ export default function Home() {
         </div>
       </div>
 
-      <div className='border-2 border-black'>
-      
+      <div className='pt-5'>
+      <div>
+        <StoreButton/>
+      </div>
       </div>
     </div>
   )

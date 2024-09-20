@@ -86,10 +86,38 @@ const deletestore = async (req, res)=>{
     }
 }
 
+// PUT method to update store item
+const updateStore = async (req, res) => {
+    try {
+        const storeId = req.params.storeId;
+        const { item, ppu, qnt } = req.body;
+
+        // Find the store item by ID and update it with the new values
+        const updatedStore = await Store.findByIdAndUpdate(storeId, {
+            item,
+            ppu,
+            qnt
+        }, { new: true });
+
+        if (!updatedStore) {
+            return res.status(404).json({ error: 'Store item not found' });
+        }
+
+        res.status(200).json({
+            message: 'Store item updated successfully',
+            data: updatedStore
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
 
 
 module.exports = {
     storeitems,
     getStore,
-    deletestore
+    deletestore,
+    updateStore
 };
