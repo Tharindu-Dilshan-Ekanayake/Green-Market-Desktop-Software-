@@ -113,11 +113,45 @@ const updateStore = async (req, res) => {
     }
 };
 
+const updateStoreQuantity = async (req, res) => {
+    try {
+        const { items } = req.body;
+
+        for (const item of items) {
+            const { itemno, quantity } = item;
+
+            // Find the store item by itemno
+            const storeItem = await Store.findOne({ itemno });
+
+            if (!storeItem) {
+                return res.status(404).json({ error: `Item ${itemno} not found in store.` });
+            }
+
+            // Check if the store has enough quantity
+            if (storeItem.qnt < quantity) {
+                return res.status(400).json({ error: `Insufficient stock for item ${itemno}.` });
+            }
+
+            // Reduce the quantity
+            storeItem.qnt -= quantity;
+
+            // Save the updated item
+            await storeItem.save();
+        }
+
+        res.status(200).json({ message: 'Store quantities updated successfully.' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
 
 
 module.exports = {
     storeitems,
     getStore,
     deletestore,
-    updateStore
+    updateStore,
+    updateStoreQuantity
 };

@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 const cors = require('cors');
 
-const { storeitems, getStore, deletestore, updateStore } = require('../controllers/storeController')
+const { storeitems, getStore, deletestore, updateStore ,  updateStoreQuantity} = require('../controllers/storeController')
 
 router.use(
     cors({
@@ -14,7 +14,8 @@ router.use(
 router.post('/storecreate', storeitems);
 router.get('/storeget',getStore);
 router.delete('/deletestore/:storeId', deletestore);
-router.put('/updateStore/:storeId',updateStore)
+router.put('/updateStore/:storeId',updateStore);
+router.put('/updateStoreQuantity', updateStoreQuantity);
 
 
 module.exports = router
