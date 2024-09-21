@@ -2,6 +2,7 @@ import React from 'react'
 import Nav from '../Components/Nav'
 import Clients from '../Components/Clients'
 import StoreButton from '../Components/store/StoreButton'
+import Bill from '../Components/Bill/Bill'
 
 export default function Home() {
   return (
@@ -14,13 +15,8 @@ export default function Home() {
         <Clients/>
       </div>
 
-      <div className='flex w-screen border-2 border-black h-[650px]'>
-        <div className='w-1/2 border-2 border-black'>
-            <h1>hi1</h1>
-        </div>
-        <div className='w-1/2 border-2 border-black'>
-            <h1>hi2</h1>
-        </div>
+      <div className=' w-screen border-2 border-black h-[650px] flex justify-center items-center'>
+        <Bill/>
       </div>
 
       <div className='pt-5'>

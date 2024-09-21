@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true })); // For parsing application/x-ww
 
 app.use('/',require('./routers/clientRoure'))
 app.use('/store',require('./routers/storeRoute'))
+app.use('/bill', require('./routers/billRouter'))
 
 const port = 8000;
 
