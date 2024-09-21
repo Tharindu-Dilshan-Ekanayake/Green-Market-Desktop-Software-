@@ -57,6 +57,8 @@ export default function Bill() {
   }, [itemName, storeItems]);
 
   const handleAddItem = () => {
+    if (isBillCreated) return;
+
     const qnt = parseFloat(quantity);
     if (!selectedStoreItem || isNaN(qnt) || qnt <= 0) {
       alert('Please select an item and enter valid quantity.');
@@ -96,6 +98,7 @@ export default function Bill() {
   };
 
   const handleClientSelect = (client) => {
+    if (isBillCreated) return;
     setSelectedClient(client);
     setClientInfo(`${client.fname} ${client.lname} - ${client.email} - ${client.tp}`);
     setSearchTerm('');
@@ -103,6 +106,7 @@ export default function Bill() {
   };
 
   const handleStoreItemSelect = (item) => {
+    if (isBillCreated) return;
     setSelectedStoreItem(item);
     setItemName(item.item);
     setFilteredStoreItems([]);
@@ -182,12 +186,16 @@ export default function Bill() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Enter client phone number, email, or name"
+            disabled={isBillCreated}
           />
-          <button className="ml-8 px-2 py-2 font-semibold text-white transition duration-300 ease-in-out transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 w-[200px]" disabled={!selectedClient}>
+          <button 
+            className={`ml-8 px-2 py-2 font-semibold text-white transition duration-300 ease-in-out transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 w-[200px] ${isBillCreated || !selectedClient ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={isBillCreated || !selectedClient}
+          >
             Select
           </button>
 
-          {searchTerm && filteredClients.length > 0 && (
+          {searchTerm && filteredClients.length > 0 && !isBillCreated && (
             <div className="absolute z-10 w-[1000px] mt-12 overflow-y-auto bg-white border border-gray-300 rounded-lg max-h-60">
               {filteredClients.map(client => (
                 <div
@@ -217,9 +225,10 @@ export default function Bill() {
             value={itemName}
             onChange={(e) => setItemName(e.target.value)}
             placeholder="Search Item"
+            disabled={isBillCreated}
           />
 
-          {itemName && filteredStoreItems.length > 0 && (
+          {itemName && filteredStoreItems.length > 0 && !isBillCreated && (
             <div className="absolute z-10 w-[300px] mt-12 overflow-y-auto bg-white border border-gray-300 rounded-lg max-h-60">
               {filteredStoreItems.map(item => (
                 <div
@@ -239,8 +248,13 @@ export default function Bill() {
             onChange={(e) => setQuantity(e.target.value)}
             placeholder="Quantity"
             type="number"
+            disabled={isBillCreated}
           />
-          <button onClick={handleAddItem} className="ml-5 px-2 py-2 font-semibold text-white transition duration-300 ease-in-out transform bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:scale-105 w-[100px]">
+          <button 
+            onClick={handleAddItem} 
+            className={`ml-5 px-2 py-2 font-semibold text-white transition duration-300 ease-in-out transform bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:scale-105 w-[100px] ${isBillCreated ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={isBillCreated}
+          >
             Add
           </button>
         </div>
@@ -259,8 +273,12 @@ export default function Bill() {
         </div>
 
         <div className="flex justify-center mt-4">
-          
-          <button onClick={handleBill} className="px-4 py-2 ml-2 font-semibold text-white transition duration-300 ease-in-out transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105">
+         
+          <button 
+            onClick={handleBill} 
+            className={`px-4 py-2 ml-2 font-semibold text-white transition duration-300 ease-in-out transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 ${isBillCreated ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={isBillCreated}
+          >
             Create Bill
           </button>
         </div>
@@ -271,7 +289,7 @@ export default function Bill() {
 
       {/* Right Side: Print Bill Section */}
       <div className="w-1/2 p-4 border">
-        <div id="printable-bill" className="p-4 mt-4 overflow-y-scroll border h-[400px]">
+        <div id="printable-bill" className="p-4 mt-4 overflow-y-auto border h-[440px]">
           <h1 className="text-2xl font-bold text-center">Welcome</h1>
           <h2 className="text-left">Customer name: <strong>{selectedClient ? `${selectedClient.fname} ${selectedClient.lname}` : 'N/A'}</strong></h2>
           <h2 className="text-left">Customer mobile: <strong>{selectedClient ? `${selectedClient.tp}` : 'N/A'}</strong></h2>
@@ -336,7 +354,10 @@ export default function Bill() {
           </button>
         </div>
         <div className='mt-12'>
-          <button onClick={handleClear} className="px-4 py-2 mr-2 font-semibold text-white transition duration-300 ease-in-out transform bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:scale-105 w-[200px] h-16">
+        <button 
+            onClick={handleClear} 
+            className="px-4 py-2 mr-2 font-semibold text-white transition duration-300 ease-in-out transform bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:scale-105 w-[200px] h-16"
+          >
             Clear
           </button>
         </div>
