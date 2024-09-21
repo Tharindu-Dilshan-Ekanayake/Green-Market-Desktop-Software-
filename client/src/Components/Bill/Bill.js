@@ -10,11 +10,12 @@ export default function Bill() {
   const [clients, setClients] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState(null);
-  
   const [storeItems, setStoreItems] = useState([]);
   const [itemName, setItemName] = useState('');
   const [filteredStoreItems, setFilteredStoreItems] = useState([]);
   const [selectedStoreItem, setSelectedStoreItem] = useState(null);
+  const [isBillCreated, setIsBillCreated] = useState(false);
+  const [billData, setBillData] = useState(null);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -90,6 +91,8 @@ export default function Bill() {
     setTotal(0);
     setItemName('');
     setQuantity('');
+    setIsBillCreated(false);
+    setBillData(null);
   };
 
   const handleClientSelect = (client) => {
@@ -112,12 +115,10 @@ export default function Bill() {
     }
 
     try {
-      // Update store quantities
       await axios.put('/store/updateStoreQuantity', { items });
 
-      // Save the bill to the database
       const billData = {
-        clientId: selectedClient.tp, // Using client's phone number as clientId
+        clientId: selectedClient.tp,
         items: items.map(item => ({
           name: item.name,
           quantity: item.quantity,
@@ -130,18 +131,51 @@ export default function Bill() {
 
       alert('Bill created successfully and store quantities updated.');
       console.log('Saved bill:', response.data);
-      handleClear();
+      setIsBillCreated(true);
+      setBillData(response.data);
     } catch (error) {
       console.error('Error creating bill:', error);
       alert('Error creating bill. Please try again.');
     }
   };
 
+  const handlePrint = () => {
+    const printContents = document.getElementById('printable-bill').innerHTML;
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Bill</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            h1, h2 { text-align: center; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+          </style>
+        </head>
+        <body>
+          ${printContents}
+        </body>
+      </html>
+    `);
+    newWindow.document.close();
+    newWindow.print();
+  };
+
+  const handleEmail = () => {
+    // Implement email functionality here
+    alert('Email functionality not implemented yet.');
+  };
+
+  const handleSMS = () => {
+    // Implement SMS functionality here
+    alert('SMS functionality not implemented yet.');
+  };
+
   return (
     <div className="flex w-screen p-4">
-      
-      <div className="w-2/3 p-4 border">
-      
+      {/* Left Side: Create Bill Section */}
+      <div className="w-1/2 p-4 border">
         <div className="relative flex justify-between mb-2">
           <input
             className="w-[1000px] p-2 border"
@@ -149,7 +183,7 @@ export default function Bill() {
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Enter client phone number, email, or name"
           />
-          <button className="ml-8 px-2 py-2  font-semibold text-white transition duration-300 ease-in-out transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 w-[200px]" disabled={!selectedClient}>
+          <button className="ml-8 px-2 py-2 font-semibold text-white transition duration-300 ease-in-out transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 w-[200px]" disabled={!selectedClient}>
             Select
           </button>
 
@@ -168,18 +202,16 @@ export default function Bill() {
           )}
         </div>
         <div className="p-2 mb-4 border rounded">
-        {selectedClient ? (
-          <div >
-            <h2>{clientInfo}</h2>
-          </div>
-        ) : (
-          
-          <h1>No client selected</h1>
-        )}
+          {selectedClient ? (
+            <div>
+              <h2>{clientInfo}</h2>
+            </div>
+          ) : (
+            <h1>No client selected</h1>
+          )}
         </div>
-        
 
-        <div className="flex gap-2 mb-2 ">
+        <div className="flex gap-2 mb-2">
           <input
             className="flex-1 p-2 border"
             value={itemName}
@@ -208,12 +240,12 @@ export default function Bill() {
             placeholder="Quantity"
             type="number"
           />
-          <button onClick={handleAddItem} className="ml-5 px-2 py-2  font-semibold text-white transition duration-300 ease-in-out transform bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:scale-105 w-[100px]">
+          <button onClick={handleAddItem} className="ml-5 px-2 py-2 font-semibold text-white transition duration-300 ease-in-out transform bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:scale-105 w-[100px]">
             Add
           </button>
         </div>
 
-        <div className="h-40 p-2 overflow-y-scroll border">
+        <div className="h-[200px] p-2 overflow-y-scroll border">
           {items.length > 0 ? (
             items.map((item, index) => (
               <div key={index} className="flex justify-between">
@@ -227,18 +259,87 @@ export default function Bill() {
         </div>
 
         <div className="flex justify-center mt-4">
-          <button onClick={handleBill} className="px-4 py-2 mr-5 font-semibold text-white transition duration-300 ease-in-out transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 w-[200px]">Bill</button>
-          <button onClick={handleClear} className="px-4 py-2 font-semibold text-white transition duration-300 ease-in-out transform bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:scale-105 w-[200px]">Clear</button>
+          
+          <button onClick={handleBill} className="px-4 py-2 ml-2 font-semibold text-white transition duration-300 ease-in-out transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105">
+            Create Bill
+          </button>
         </div>
-
         <div className="mt-2">
-          <h2 className="text-xl text-right">Total: ${total.toFixed(2)}</h2>
+          <h2 className="text-3xl text-right text-green-600">Total: ${total.toFixed(2)}</h2>
         </div>
       </div>
 
-      <div className="w-1/3 p-4 border">
-        <h1>Print Bill</h1>
-        {/* Add print bill functionality here */}
+      {/* Right Side: Print Bill Section */}
+      <div className="w-1/2 p-4 border">
+        <div id="printable-bill" className="p-4 mt-4 overflow-y-scroll border h-[400px]">
+          <h1 className="text-2xl font-bold text-center">Welcome</h1>
+          <h2 className="text-left">Customer name: <strong>{selectedClient ? `${selectedClient.fname} ${selectedClient.lname}` : 'N/A'}</strong></h2>
+          <h2 className="text-left">Customer mobile: <strong>{selectedClient ? `${selectedClient.tp}` : 'N/A'}</strong></h2>
+          <h3 className="text-left">Date: <strong>{new Date().toLocaleDateString()}</strong></h3>
+          <table className="w-full mt-4">
+            <thead>
+              <tr>
+                <th className="border">Item</th>
+                <th className="border">Quantity</th>
+                <th className="border">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.length > 0 ? (
+                items.map((item, index) => (
+                  <tr key={index}>
+                    <td className="border">{item.name}</td>
+                    <td className="border">{item.quantity}</td>
+                    <td className="border">${(item.quantity * item.price).toFixed(2)}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" className="text-center border">No items added</td>
+                </tr>
+              )}
+              <tr>
+                <td colSpan="2" className="font-bold border">Total</td>
+                <td className="font-bold border">${total.toFixed(2)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className='ml-12'>
+        <div>
+          <button 
+            onClick={handlePrint} 
+            className={`px-4 py-2 font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 w-[200px] h-16 ${!isBillCreated ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={!isBillCreated}
+          >
+            Print Bill
+          </button>
+        </div>
+        
+        <div className='mt-12'>
+          <button 
+            onClick={handleEmail}
+            className={`px-4 py-2 font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 w-[200px] h-16 ${!isBillCreated ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={!isBillCreated}
+          >
+            Send Email
+          </button>
+        </div>
+        <div className='mt-12'>
+          <button 
+            onClick={handleSMS}
+            className={`px-4 py-2 font-semibold text-white bg-green-500 rounded-lg hover:bg-green-600 w-[200px] h-16 ${!isBillCreated ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={!isBillCreated}
+          >
+            Send SMS
+          </button>
+        </div>
+        <div className='mt-12'>
+          <button onClick={handleClear} className="px-4 py-2 mr-2 font-semibold text-white transition duration-300 ease-in-out transform bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:scale-105 w-[200px] h-16">
+            Clear
+          </button>
+        </div>
       </div>
     </div>
   );
