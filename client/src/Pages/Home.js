@@ -26,7 +26,7 @@ export default function Home() {
       <hr />
 
       {/* Store Button Section */}
-      <div className="pt-9">
+      <div className="pt-4">
         <StoreButton />
       </div>
 
