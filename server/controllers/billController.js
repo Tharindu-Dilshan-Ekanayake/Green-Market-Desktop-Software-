@@ -3,10 +3,10 @@ const Bill = require ('../models/bills')
 // Controller for creating a new bill
 const createBill = async (req, res) => {
   try {
-    const { clientInfo, items } = req.body;
+    const { clientId, items } = req.body;
 
     // Validate that clientInfo and items are provided
-    if (!clientInfo || !items || !items.length) {
+    if (!clientId || !items || !items.length) {
       return res.status(400).json({ error: 'Client information and items are required.' });
     }
 
@@ -15,7 +15,7 @@ const createBill = async (req, res) => {
 
     // Create a new bill
     const newBill = new Bill({
-      clientInfo,
+      clientId,
       items,
       total,
     });

@@ -18,7 +18,7 @@ const itemSchema = new mongoose.Schema({
 
 // Define the main Bill schema
 const billSchema = new mongoose.Schema({
-  clientInfo: {
+  clientId: {
     type: String,
     required: true // Client info can be phone number, email, or name
   },
