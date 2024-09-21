@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Define the item schema for the items on the bill
 const itemSchema = new mongoose.Schema({
-  name: {
+  clientid: {
     type: String,
     required: true
   },
