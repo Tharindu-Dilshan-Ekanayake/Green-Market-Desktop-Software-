@@ -139,20 +139,22 @@ export default function Bill() {
 
   return (
     <div className="flex w-screen p-4">
+      
       <div className="w-2/3 p-4 border">
-        <div className="relative flex mb-2">
+      
+        <div className="relative flex justify-between mb-2">
           <input
-            className="w-[900px] p-2 border"
+            className="w-[1000px] p-2 border"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Enter client phone number, email, or name"
           />
-          <button className="p-2 text-white bg-blue-500" disabled={!selectedClient}>
+          <button className="ml-8 px-2 py-2  font-semibold text-white transition duration-300 ease-in-out transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 w-[200px]" disabled={!selectedClient}>
             Select
           </button>
 
           {searchTerm && filteredClients.length > 0 && (
-            <div className="absolute z-10 w-full mt-2 overflow-y-auto bg-white border border-gray-300 rounded-lg max-h-60">
+            <div className="absolute z-10 w-[1000px] mt-12 overflow-y-auto bg-white border border-gray-300 rounded-lg max-h-60">
               {filteredClients.map(client => (
                 <div
                   key={client._id}
@@ -165,14 +167,19 @@ export default function Bill() {
             </div>
           )}
         </div>
-
-        {selectedClient && (
-          <div className="p-2 mb-4 bg-gray-100 border rounded">
-            <h2>Selected Client: {clientInfo}</h2>
+        <div className="p-2 mb-4 border rounded">
+        {selectedClient ? (
+          <div >
+            <h2>{clientInfo}</h2>
           </div>
+        ) : (
+          
+          <h1>No client selected</h1>
         )}
+        </div>
+        
 
-        <div className="relative flex gap-2 mb-2">
+        <div className="flex gap-2 mb-2 ">
           <input
             className="flex-1 p-2 border"
             value={itemName}
@@ -181,7 +188,7 @@ export default function Bill() {
           />
 
           {itemName && filteredStoreItems.length > 0 && (
-            <div className="absolute z-10 w-full mt-2 overflow-y-auto bg-white border border-gray-300 rounded-lg max-h-60">
+            <div className="absolute z-10 w-[300px] mt-12 overflow-y-auto bg-white border border-gray-300 rounded-lg max-h-60">
               {filteredStoreItems.map(item => (
                 <div
                   key={item._id}
@@ -195,13 +202,13 @@ export default function Bill() {
           )}
 
           <input
-            className="flex-1 p-2 border"
+            className="flex-1 p-2 border w-[100px]"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
             placeholder="Quantity"
             type="number"
           />
-          <button onClick={handleAddItem} className="p-2 text-white bg-green-500">
+          <button onClick={handleAddItem} className="ml-5 px-2 py-2  font-semibold text-white transition duration-300 ease-in-out transform bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:scale-105 w-[100px]">
             Add
           </button>
         </div>
@@ -219,9 +226,9 @@ export default function Bill() {
           )}
         </div>
 
-        <div className="flex justify-between mt-4">
-          <button onClick={handleBill} className="p-2 text-white bg-blue-500">Bill</button>
-          <button onClick={handleClear} className="p-2 text-white bg-red-500">Clear</button>
+        <div className="flex justify-center mt-4">
+          <button onClick={handleBill} className="px-4 py-2 mr-5 font-semibold text-white transition duration-300 ease-in-out transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 w-[200px]">Bill</button>
+          <button onClick={handleClear} className="px-4 py-2 font-semibold text-white transition duration-300 ease-in-out transform bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:scale-105 w-[200px]">Clear</button>
         </div>
 
         <div className="mt-2">

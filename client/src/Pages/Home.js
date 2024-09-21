@@ -14,9 +14,14 @@ export default function Home() {
       <div className=''>
         <Clients/>
       </div>
+      <hr></hr>
 
-      <div className=' w-screen border-2 border-black h-[650px] flex justify-center items-center'>
-        <Bill/>
+      <div className=' w-screen   h-[650px] flex justify-center bg-[#19191A] bg-opacity-5 pt-3 '>
+        <div>
+          <h1 className='px-4 text-2xl text-left'><storage>BILL </storage></h1>
+          <Bill/>
+        </div>
+        
       </div>
 
       <div className='pt-5'>
