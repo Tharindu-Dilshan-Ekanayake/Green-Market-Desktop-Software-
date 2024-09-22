@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaCalculator } from "react-icons/fa";
+import { IoIosPrint } from "react-icons/io";
+import { MdAttachEmail } from "react-icons/md";
+import { MdSms } from "react-icons/md";
+import { BsEraserFill } from "react-icons/bs";
+import { MdAdd } from "react-icons/md";
 
 export default function Bill() {
   const [clientInfo, setClientInfo] = useState('');
@@ -252,10 +258,13 @@ export default function Bill() {
           />
           <button 
             onClick={handleAddItem} 
-            className={`ml-5 px-2 py-2 font-semibold text-white transition duration-300 ease-in-out transform bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:scale-105 w-[100px] ${isBillCreated ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`ml-5 px-2 py-2 font-semibold text-white transition duration-300 ease-in-out transform bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:scale-105 w-[60px] ${isBillCreated ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={isBillCreated}
           >
-            Add
+            <div className='flex justify-center'>
+              <MdAdd className='size-7'/>
+            </div>
+            
           </button>
         </div>
 
@@ -278,8 +287,10 @@ export default function Bill() {
             onClick={handleBill} 
             className={`px-4 py-2 ml-2 font-semibold text-white transition duration-300 ease-in-out transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:scale-105 ${isBillCreated ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={isBillCreated}
-          >
-            Create Bill
+          ><div className='flex items-center justify-center'>
+            Create Bill <FaCalculator className='ml-4'/>
+          </div>
+            
           </button>
         </div>
         <div className="mt-2">
@@ -330,8 +341,11 @@ export default function Bill() {
             onClick={handlePrint} 
             className={`px-4 py-2 font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 w-[200px] h-16 ${!isBillCreated ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={!isBillCreated}
-          >
-            Print Bill
+          ><div className='flex items-center justify-center text-center'>
+            Print Bill<IoIosPrint className='ml-2 size-7'/>
+            
+          </div>
+            
           </button>
         </div>
         
@@ -340,8 +354,11 @@ export default function Bill() {
             onClick={handleEmail}
             className={`px-4 py-2 font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 w-[200px] h-16 ${!isBillCreated ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={!isBillCreated}
-          >
-            Send Email
+          ><div className='flex items-center justify-center text-center'>
+          Send Email< MdAttachEmail className='ml-2 size-7'/>
+          
+        </div>
+           
           </button>
         </div>
         <div className='mt-12'>
@@ -350,7 +367,11 @@ export default function Bill() {
             className={`px-4 py-2 font-semibold text-white bg-green-500 rounded-lg hover:bg-green-600 w-[200px] h-16 ${!isBillCreated ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={!isBillCreated}
           >
-            Send SMS
+            <div className='flex items-center justify-center text-center'>
+            Send SMS<MdSms className='ml-2 size-7'/>
+            
+          </div>
+            
           </button>
         </div>
         <div className='mt-12'>
@@ -358,7 +379,10 @@ export default function Bill() {
             onClick={handleClear} 
             className="px-4 py-2 mr-2 font-semibold text-white transition duration-300 ease-in-out transform bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:scale-105 w-[200px] h-16"
           >
-            Clear
+           <div className='flex items-center justify-center text-center'>
+            Clear<BsEraserFill className='ml-2 size-7'/>
+            
+          </div>
           </button>
         </div>
       </div>
