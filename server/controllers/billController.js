@@ -1,4 +1,5 @@
 const Bill = require ('../models/bills')
+const Client = require('../models/client');
 
 // Controller for creating a new bill
 const createBill = async (req, res) => {
@@ -28,13 +29,29 @@ const createBill = async (req, res) => {
   }
 };
 
-// Controller to get all bills
 const getBills = async (req, res) => {
   try {
-    const bills = await Bill.find();
-    res.status(200).json(bills);
+    const { date } = req.query;
+
+    // Filter bills by date (assuming bill has a `createdAt` field)
+    const bills = await Bill.find({
+      createdAt: {
+        $gte: new Date(`${date}T00:00:00Z`),
+        $lte: new Date(`${date}T23:59:59Z`)
+      }
+    });
+
+    // Find clients who joined on the selected date
+    const clients = await Client.find({
+      createdAt: {
+        $gte: new Date(`${date}T00:00:00Z`),
+        $lte: new Date(`${date}T23:59:59Z`)
+      }
+    });
+
+    res.status(200).json({ bills, clients });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while fetching the bills.' });
+    res.status(500).json({ error: 'An error occurred while fetching the bills and clients.' });
   }
 };
 
